@@ -1,0 +1,5 @@
+oop_assignment
+oop_assignment.exe
+*.o
+*.obj
+build/

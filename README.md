@@ -1,99 +1,61 @@
-# CSCP2023 – OOP Assignment: Advanced OOP Programming
+# CSCP2023 — OOP Assignment: Advanced OOP Programming
 
-**Name:** _your name_
-**Registration No.:** _your reg. number_
+**Name:** _Add your name_<br>
+**Registration No.:** _Add your registration number_
 
-The full assignment is in [`docs/Assignment.pdf`](docs/Assignment.pdf).
+The assignment paper is included as [`Assignment.pdf`](Assignment.pdf).
 
-## Project Structure
-
-Only `src/main.cpp` is provided. **You create the rest** by adding a `.h` and a
-`.cpp` file for every class inside `src/`. When you are done it should look like:
+## Project structure
 
 ```text
 .
-├── README.md
+├── Assignment.pdf
 ├── Makefile
-├── docs/
-│   └── Assignment.pdf
+├── README.md
 └── src/
-    ├── main.cpp                 # provided: menu for all four questions
-    ├── Student.h / Student.cpp  # you create (Q1)
-    └── ...                      # same for Wallet, Product, ResourceManager,
-                                 # Patient, HospitalManager
+    ├── main.cpp
+    ├── Student.h / Student.cpp
+    ├── Wallet.h / Wallet.cpp
+    ├── Product.h / Product.cpp
+    ├── ResourceManager.h / ResourceManager.cpp
+    ├── Patient.h / Patient.cpp
+    └── HospitalManager.h / HospitalManager.cpp
 ```
 
-### How to split a class into `.h` and `.cpp`
+The menu in `src/main.cpp` runs any of the four assignment questions. Each class has its own header and implementation file.
 
-Example class (not part of the assignment):
+## Build and run
 
-`src/Book.h` : declaration only
-```cpp
-#ifndef BOOK_H
-#define BOOK_H
-#include <string>
+With GNU Make and a C++17 compiler:
 
-class Book {
-    std::string title;
-    int pages;
-public:
-    Book(std::string t, int p);
-    void display() const;
-};
-
-#endif
+```sh
+make
+make run
+make clean
 ```
 
-`src/Book.cpp` : function bodies, with `Book::` in front of each name
-```cpp
-#include "Book.h"
-#include <iostream>
-using namespace std;
+Or compile directly:
 
-Book::Book(string t, int p) : title(t), pages(p) {}
-
-void Book::display() const {
-    cout << title << " (" << pages << " pages)" << endl;
-}
+```sh
+g++ -std=c++17 -Wall -Wextra -pedantic src/*.cpp -o oop_assignment
+./oop_assignment
 ```
 
-`src/main.cpp` : just include the header
-```cpp
-#include "Book.h"
-// ...
-```
+On Windows with MinGW, run `oop_assignment.exe` after compiling.
 
-The Makefile compiles every `.cpp` in `src/` automatically, so new files need no
-extra setup.
+## Design notes
 
-## Compilation Instructions
+- `Wallet::operator+` returns the combined balance; `operator-` returns Wallet 1's balance minus Wallet 2's.
+- Wallet transaction records and Patient daily charges use dynamically allocated arrays. Their copy constructors make independent copies.
+- Product `operator+` combines stock only when both products have the same ID. Product `operator[]` reads a stock-history entry.
+- Patient `operator+` returns the combined bills. Select a day with `setIncrementDay(day)` before using prefix or postfix `++` to add Rs. 100 to that day's charge.
+- Assignment operators copy mutable information while preserving the destination object's constant ID.
 
-Using the Makefile (needs `g++` and `make`):
+## Requirements checklist
 
-```bash
-make        # build
-make run    # build and run
-make clean  # remove build files
-```
-
-Without make:
-
-```bash
-g++ -std=c++17 -Wall -Wextra src/*.cpp -o oop_assignment
-./oop_assignment      # Windows: oop_assignment.exe
-```
-
-## Notes on My Implementation
-
-_Briefly describe design decisions here (e.g. what `+` returns for Wallet, how
-`[]` is used in Product), as you may be asked to explain them during evaluation._
-
-## Rules Checklist
-
-- [ ] Separate `.h` and `.cpp` file for each class
-- [ ] `main.cpp` demonstrates all functionality
-- [ ] No global variables, no public data members
-- [ ] No inheritance, no STL containers replacing required arrays
-- [ ] Deep copy where needed, no memory leaks or dangling pointers
-- [ ] All overloaded operators tested with multiple objects
-- [ ] Committed regularly with meaningful messages (e.g. `Q2: Wallet deep copy done`)
+- [x] Separate header and implementation files for each class
+- [x] One menu-based `main.cpp` demonstrates all four questions
+- [x] No global variables, public data members, or inheritance
+- [x] Required arrays and dynamic memory are used instead of STL containers
+- [x] Deep copy is implemented for dynamically allocated records
+- [x] The menu exercises the required overloaded operators with multiple objects
